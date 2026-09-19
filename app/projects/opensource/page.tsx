@@ -1,9 +1,7 @@
-export default async function OpenSourcePage() {
-  const response = await fetch(
-    "http://localhost:3000/api/projects?type=opensource"
-  );
+import { getProjects } from "../../api/lib/projects-db";
 
-  const projects = await response.json();
+export default async function OpenSourcePage() {
+  const projects = await getProjects("opensource");
 
   return (
     <main className="min-h-screen px-16 py-12">
@@ -12,22 +10,24 @@ export default async function OpenSourcePage() {
       </h1>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {projects.map(
-          (project: { id: number; name: string; type: string }) => (
-            <div
-              key={project.id}
-              className="rounded-xl border p-6 shadow-sm"
-            >
-              <h2 className="mb-2 text-2xl font-semibold">
-                {project.name}
-              </h2>
+        {projects.map((project) => (
+          <div
+            key={project.id}
+            className="rounded-xl border p-6 shadow-sm"
+          >
+            <h2 className="mb-2 text-2xl font-semibold">
+              {project.title}
+            </h2>
 
-              <p className="text-gray-600">
-                {project.type}
-              </p>
-            </div>
-          )
-        )}
+            <p className="mb-3 text-gray-600">
+              {project.description}
+            </p>
+
+            <p className="text-sm text-gray-500">
+              {project.type}
+            </p>
+          </div>
+        ))}
       </div>
     </main>
   );
